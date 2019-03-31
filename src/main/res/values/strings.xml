@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Golden Hands</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+
+    <!--time value-->
+    <string-array name="value">
+        <item>h</item>
+        <item>m</item>
+        <item>s</item>
+    </string-array>
+
+    <string-array name="mesu">
+        <item>Cup</item>
+        <item>tSpoon</item>
+        <item>TbSpoon</item>
+        <item>g</item>
+        <item>ml</item>
+    </string-array>
+</resources>
