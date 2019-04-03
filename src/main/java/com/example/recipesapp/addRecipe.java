@@ -219,7 +219,7 @@ public class addRecipe extends AppCompatActivity {
         if (user != null) {
             if(selectedImage.)
             calllThis();
-
+//
             //serving.getText().toString();
             //rctime.getText().toString();
             //prepTime.getText().toString();
