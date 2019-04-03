@@ -28,7 +28,7 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 public class Login extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
-    public static final int PICK_IMAGE = 1;
+    public static final int PICK_IMAGE = 1;//not do it
     // [START declare_auth]
     private FirebaseAuth mAuth;
     // [END declare_auth]

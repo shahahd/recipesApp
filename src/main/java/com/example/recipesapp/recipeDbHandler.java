@@ -1,5 +1,6 @@
 package com.example.recipesapp;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -41,22 +42,21 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
 
 public class recipeDbHandler {
-    FirebaseFirestore db;
-    FirebaseAuth mAuth ;
-    FirebaseStorage storage;
-    StorageReference storageRef;
+   private FirebaseFirestore db;
+   private FirebaseAuth mAuth ;
+   private FirebaseStorage storage;
+   private StorageReference storageRef;
 
-     /*recipeDbHandler( FirebaseFirestore db){
-          this.db=db;
-     }*/
      public void setup() {
           // [START get_firestore_instance]
          db = FirebaseFirestore.getInstance();
          mAuth = FirebaseAuth.getInstance();
          storage = FirebaseStorage.getInstance();
-         storageRef = storage.getReference();
+         storageRef = storage.getReference("recipeImage");
+        // StorageReference userImagesRef = storageRef.child("images");
           // [END get_firestore_instance]
 
           // [START set_firestore_settings] //enable offline
@@ -69,13 +69,7 @@ public class recipeDbHandler {
      public void addRecipes(Uri selectedImage,String recipeName , String description, Map<String,Object> dt, String serve, String time){
           try {
               setup();
-              Random rndm = new Random();
-              int a = rndm.nextInt(10000);
-              String fileName = mAuth.getUid()+ String.valueOf(a)+selectedImage.getLastPathSegment();
-              StorageReference riversRef = storageRef.child(fileName);
-              UploadTask uploadTask = riversRef.putFile(selectedImage);
-             // if(uploadTask.isSuccessful()) {
-                  dt.put("image", fileName);
+             // if(){
                   dt.put("UserId",mAuth.getUid());
                   dt.put("recipeName",recipeName);
                   dt.put("recipeDsc",description);
@@ -83,9 +77,26 @@ public class recipeDbHandler {
                   dt.put("serving",serve);
                   db.collection("recipes").document().set(dt);
              // }
+
           }catch  (Exception e) {
               e.printStackTrace();
           }
      }
+     private void uploadPhoto(){
+        // Random rndm = new Random();
+        // int a = rndm.nextInt(10000);
+         // String fileName = mAuth.getUid()+ String.valueOf(a)+selectedImage.getLastPathSegment();was the image name
+         final String imageName = UUID.randomUUID().toString() + ".jpg";
+         /*storageRef.child("image").child(imageName).putFile(selectedImage).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+             @Override
+             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+
+                 if (task.isSuccessful()) {
+                     dt.put("image", imageName);
+
+
+                 }}});*/
+     }
 
 }
+

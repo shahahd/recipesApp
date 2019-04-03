@@ -37,6 +37,9 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-firestore:4.3.2'
     //UI storage
     implementation 'com.firebaseui:firebase-ui-storage:4.3.2'
+    //picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
 
 }
 apply plugin: 'com.google.gms.google-services'

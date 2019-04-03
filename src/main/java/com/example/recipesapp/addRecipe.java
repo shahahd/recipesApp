@@ -27,6 +27,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.lang.reflect.Array;
 import java.net.URI;
@@ -39,48 +40,47 @@ import java.util.Random;
 
 public class addRecipe extends AppCompatActivity {
     private static final int GALLERY_REQUEST_CODE=1;
-    ImageView picPhoto;
-    FirebaseAuth mAuth;
-    EditText recipeName,recipeDescription;
-    public FirebaseFirestore db ;
-    Uri selectedImage;//to assign the chosen image URI &send it to dbhandler
-    Map<String, Object> ingrediant=new HashMap<>();
-   // ArrayList <String> a =new ArrayList<>();
-    String []dt;
-    TextView showTime;
-    TextView showTime2;
-    int cTime=0;//set value for time
-    int tPrep=0;
-    TextView rctime,prepTime;
-    EditText serving,QntEditText;
-    Spinner sp1;
+    private ImageView picPhoto;
+    private EditText recipeName,recipeDescription;
+    private TextView showTime;
+    private TextView showTime2;
+    private TextView rctime,prepTime;
+    private EditText serving,QntEditText;
     private LinearLayout parentLinearLayout;
     private LinearLayout parentLinearLayout2;
+    private Spinner sp1;
+
+    private FirebaseFirestore db ;
+    private Uri selectedImage;//to assign the chosen image URI &send it to dbhandler
+    private Map<String, Object> ingrediant=new HashMap<>();
+    private String []dt;
+    private FirebaseAuth mAuth;
+    private int cTime=0;//set value for time
+    private int tPrep=0;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_recipe);
+        //bind the layout
         picPhoto =(ImageView)findViewById(R.id.imageView);
         recipeName=(EditText)findViewById(R.id.rcName);
         recipeDescription=(EditText)findViewById(R.id.rcDescrip);
-        mAuth = FirebaseAuth.getInstance();
         parentLinearLayout = (LinearLayout) findViewById(R.id.parent_linear_layout);//*****************for dynamic layout*****
         parentLinearLayout2 = (LinearLayout) findViewById(R.id.parent_linear_layout2);
-        db= FirebaseFirestore.getInstance();
         showTime=(TextView)findViewById(R.id.timeIn);
         showTime2=(TextView)findViewById(R.id.pretime2);
-        //
         serving=(EditText)findViewById(R.id.serving);
         rctime=(TextView)findViewById(R.id.timeIn);
         prepTime=(TextView)findViewById(R.id.pretime2);
         sp1=(Spinner)findViewById(R.id.spinner);
         parentLinearLayout = (LinearLayout) findViewById(R.id.parent_linear_layout);
         parentLinearLayout2 = (LinearLayout) findViewById(R.id.parent_linear_layout2);
-
-
-        //rctime=(EditText)findViewById(R.id.time)
-
+        //
+        mAuth = FirebaseAuth.getInstance();
+        db= FirebaseFirestore.getInstance();
     }
 
     //*****to the dynamic layout onAddField & onDelete
@@ -132,7 +132,8 @@ public class addRecipe extends AppCompatActivity {
         tPrep--;
         showTime2.setText(Integer.toString(tPrep));
     }
-    //back button
+
+    //back button ///////////////////////////////////////////////////////////////////////////////////////////
     public void back(View v){
         Intent n= new Intent(this,MainActivity.class);
         startActivity(n);
@@ -160,21 +161,20 @@ public class addRecipe extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults)
     {
-        switch (requestCode) {
+        switch (requestCode) {////////////////////////////////////////////////////////////////////////////why switch
             case GALLERY_REQUEST_CODE:
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(galleryIntent, GALLERY_REQUEST_CODE);
                 } else {
-                    //do something like displaying a message that he didn`t allow the app to access gallery and you wont be able to let him select from gallery
                     Toast.makeText(getApplicationContext(),"cannot open gallery",Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
     }
 
-    //get image name & show the chesen image
+    //get image name & show the chosen image
     public void onActivityResult(int requestCode,int resultCode,Intent data){
         // Result code is RESULT_OK only if the user selects an Image
         if (resultCode == Activity.RESULT_OK)
@@ -182,7 +182,9 @@ public class addRecipe extends AppCompatActivity {
                 case GALLERY_REQUEST_CODE :
                     //data.getData returns the content URI for the selected Image
                     selectedImage = data.getData();
-                    picPhoto.setImageURI(selectedImage);
+                    //picPhoto.setImageURI(selectedImage);
+                   // selectedImage = data.getData();
+                    Picasso.get().load(selectedImage).into(picPhoto);
                     //UploadToFireBase();//***********not called here it must call when user click on upload button delete it*****
                     break;
             }}
@@ -205,20 +207,23 @@ public class addRecipe extends AppCompatActivity {
             //ArrayList a =
             //String ing="ing"+String.valueOf(dt);
         }
-        List <String>atost=Arrays.asList(dt);
-        ingrediant.put("ing",atost);
+        List <String>ingrediant_tag=Arrays.asList(dt);
+        ingrediant.put("ing",ingrediant_tag);
     }
 
 
 
-    //upload to firestore
+    //upload to fireStore
     public void UploadToFireBase(View v){
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
+            if(selectedImage.)
             calllThis();
+
             //serving.getText().toString();
             //rctime.getText().toString();
             //prepTime.getText().toString();
+            //get the time and the item unit (h,min)
             String timePerUnit=rctime.getText().toString()+sp1.getSelectedItem().toString();
             recipeDbHandler rc=new recipeDbHandler();
             rc.addRecipes(selectedImage, recipeName.getText().toString(),recipeDescription.getText().toString(),ingrediant,
